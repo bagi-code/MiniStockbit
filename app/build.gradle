@@ -1,0 +1,122 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk setup.compileSdk
+
+    defaultConfig {
+        applicationId "com.robby.ministockbit"
+        minSdk setup.minSdk
+        targetSdk setup.targetSdk
+        versionCode setup.versionCode
+        versionName setup.versionName
+        multiDexEnabled true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+    flavorDimensions "release"
+    productFlavors {
+        mainapp {
+            versionCode setup.versionCode
+            versionName setup.versionName
+            manifestPlaceholders = [appsName: "Mini Stockbit"]
+            buildConfigField "String", "BASE_URL", '"https://min-api.cryptocompare.com/"'
+        }
+        sanapp {
+            applicationIdSuffix ".san"
+            versionCode setup.versionCode
+            versionName setup.versionName
+            manifestPlaceholders = [appsName: "Mini Stockbit (San)"]
+            buildConfigField "String", "BASE_URL", '"https://min-api.cryptocompare.com/"'
+        }
+        devapp {
+            applicationIdSuffix ".dev"
+            versionCode setup.versionCode
+            versionName setup.versionName
+            manifestPlaceholders = [appsName: "Mini Stockbit (Dev)"]
+            buildConfigField "String", "BASE_URL", '"https://min-api.cryptocompare.com/"'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def flavorName = variant.name
+            def versionCode = variant.versionCode
+            def versionName = variant.versionName
+            if (flavorName.contains("main")) {
+                if (variant.buildType.name == "release") {
+                    outputFileName = "MiniStockbit-MainApp-Release-" + versionName + "-(" + versionCode + ").apk"
+                } else {
+                    outputFileName = "MiniStockbit-MainApp-Debug-" + versionName + "-(" + versionCode + ").apk"
+                }
+            } else if (flavorName.contains("san")) {
+                if (variant.buildType.name == "release") {
+                    outputFileName = "MiniStockbit-SanApp-Release-" + versionName + "-(" + versionCode + ").apk"
+                } else {
+                    outputFileName = "MiniStockbit-SanApp-Debug-" + versionName + "-(" + versionCode + ").apk"
+                }
+            } else if (flavorName.contains("dev")) {
+                if (variant.buildType.name == "release") {
+                    outputFileName = "MiniStockbit-DevApp-Release-" + versionName + "-(" + versionCode + ").apk"
+                } else {
+                    outputFileName = "MiniStockbit-DevApp-Debug-" + versionName + "-(" + versionCode + ").apk"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    implementation "com.squareup.retrofit2:retrofit:2.4.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.4.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.2"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+    implementation "org.koin:koin-android:2.0.1"
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
+    implementation 'org.koin:koin-androidx-scope:2.0.1'
+
+    implementation "androidx.room:room-runtime:2.1.0"
+    implementation "androidx.room:room-coroutines:2.1.0-alpha04"
+    implementation "androidx.room:room-rxjava2:2.1.0"
+    kapt "androidx.room:room-compiler:2.1.0"
+
+    implementation "androidx.multidex:multidex:2.0.1"
+
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    testImplementation 'junit:junit:4.+'
+    debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
