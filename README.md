@@ -45,6 +45,8 @@ Modularization, based on Clean Architecture divided into three main modules
 - [x] [View Binding](https://developer.android.com/topic/libraries/view-binding)
 - [x] [Koin](https://start.insert-koin.io/#/quickstart/kotlin): Dependency Injection / Service Locator
 - [x] [Jetpack Navigation](https://developer.android.com/guide/navigation/navigation-getting-started)
+- [x] [Chuck](https://github.com/jgilfelt/chuck)
+- [x] [Room](https://developer.android.com/jetpack/androidx/releases/room)
 
 #### Development, Debug & Test
 
